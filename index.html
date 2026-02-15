@@ -2,53 +2,362 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>إدارة الصيدلية</title>
+    <title>إدارة الصيدلية الذكية - سجل المراقبة</title>
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="theme-color" content="#27ae60">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
-        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        input { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
-        button { padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        :root { --main: #2c3e50; --success: #27ae60; --danger: #e74c3c; --bg: #f8f9fa; --card: white; --text: #333; }
+        body.dark-mode { --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; }
+        body.dark-mode .container { background: var(--card); color: var(--text); }
+        body.dark-mode table { color: var(--text); }
+        body.dark-mode input { background: #2d2d2d; border-color: #444; color: white; }
+        body.dark-mode tr:hover { background: #252525; }
+        body.dark-mode .quick-stats { background: #2d2d2d; border: 1px solid #444; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; padding: 20px; direction: rtl; transition: 0.3s; }
+        .container { max-width: 1250px; margin: auto; background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 12px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+        .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; cursor: pointer; background: #f8f9fa; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #3498db; color: white; padding: 12px; }
+        td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+        .selected-row { background: rgba(52, 152, 219, 0.2) !important; }
+        .p-name-link { cursor: pointer; color: #2980b9; transition: 0.2s; text-decoration: underline; }
+        .quick-stats { display: flex; gap: 10px; margin-top: 20px; padding: 15px; background: #eef2f3; border-radius: 12px; flex-wrap: wrap; align-items: center; }
+        .stat-item { flex: 1; text-align: center; font-weight: bold; min-width: 120px; }
+        .nav-btn { padding: 10px 15px; border-radius: 10px; border: none; cursor: pointer; color: white; font-weight: bold; transition: 0.3s; }
+        #reader { width: 100%; max-width: 400px; margin: auto; display: none; border: 2px solid var(--main); border-radius: 10px; overflow: hidden; }
+        .backup-section { margin-top: 20px; padding: 15px; background: #f1f2f6; border-radius: 12px; border: 1px dashed #ccc; text-align: center; }
+        #invoiceCapture { position: fixed; top: -5000px; width: 350px; background: #fff; padding: 20px; border: 1px solid #333; text-align: center; color: #000; }
+#watermark-logic {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    opacity: 0.15; /* خيال خفيف جداً */
+    z-index: 9999; /* فوق الجدول وفوق الألوان */
+    pointer-events: none;
+}
+
+
+#invoiceCapture {
+    position: fixed;
+    top: -9999px; /* بتفضل مستخبية عنك بس الكاميرا بتشوفها */
+    width: 450px;
+    background: white url('icon.png') no-repeat center !important;
+    background-size: 250px !important;
+    padding: 20px;
+}
+
     </style>
 </head>
 <body>
-    <h1>نظام الصيدلية الذكي</h1>
+<img src="icon.png" id="watermark-logic">
+<div id="invoiceCapture"></div>
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>💊 إدارة الصيدلية - الروشتة السريعة</h2>
+        <div>
+            <button onclick="toggleDarkMode()" class="nav-btn" style="background:#8e44ad;">🌙</button>
+            <button onclick="processBundleSale('cash')" id="finalSellBtn" class="nav-btn" style="background:var(--success); display:none;">✅ بيع الروشتة (<span id="selectedCount">0</span>)</button>
+            <button onclick="processBundleSale('debt')" id="finalDebtBtn" class="nav-btn" style="background:#e67e22; display:none;">📝 روشتة آجل</button>
+        </div>
+    </div>
+
+    <div id="reader"></div>
+    <div class="form-row">
+        <input type="text" id="newName" placeholder="اسم الدواء">
+        <input type="number" id="newPurchase" placeholder="الشراء">
+        <input type="number" id="newSale" placeholder="البيع">
+        <input type="number" id="newStock" placeholder="الكمية">
+        <input type="text" id="newExpiry" placeholder="الصلاحية">
+        <input type="text" id="newNote" placeholder="ملاحظة">
+        <button onclick="addProduct()" style="background:var(--success); color:white; border-radius:8px; cursor:pointer;">إضافة</button>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <input type="text" id="search" style="flex: 1; padding:12px;" placeholder="🔍 ابحث وحدد الأصناف للروشتة..." onkeyup="filter()">
+        <button onclick="startScan()" style="background:var(--main); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">📷 سكان باركود</button>
+    </div>
+
+    <table id="mainTable">
+        <thead>
+            <tr>
+                <th>تحديد</th>
+                <th>الاسم (سجل)</th>
+                <th>السعر</th>
+                <th>المخزن</th>
+                <th>الكمية</th>
+                <th>إدارة</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <div class="quick-stats">
+        <input type="text" id="bundleCust" placeholder="اسم العميل" style="width:150px">
+        <input type="text" id="bundlePhone" placeholder="واتساب" style="width:120px">
+        <div class="stat-item">إجمالي الروشتة: <span id="bundleTotal">0</span> ج.م</div>
+        <button onclick="generateStockImage()" class="nav-btn" style="background:var(--danger);">📸 صورة النواقص</button>
+        <button onclick="window.location.href='/debts.html'" class="nav-btn" style="background:#e67e22;">📝 دفتر الشكك</button>
+        <button onclick="window.location.href='/suppliers.html'" class="nav-btn" style="background:#34495e;">🏢 حسابات الشركات</button>
+        <button onclick="goDashboard()" class="nav-btn" style="background:var(--main);">📊 التقارير</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+        <div style="border:1px solid #ffcccc; padding:15px; border-radius:10px;">
+            <h4 style="margin:0 0 10px 0; color:var(--danger)">💸 تسجيل مصروفات سريعة</h4>
+            <input type="text" id="expR" placeholder="السبب" style="width: 40%;"> 
+            <input type="number" id="expA" placeholder="المبلغ" style="width: 30%;">
+            <button onclick="addExp()" style="background:var(--danger); color:white; padding:8px; border-radius:5px; cursor:pointer;">خصم الآن</button>
+        </div>
+        <div class="backup-section">
+            <button onclick="downloadBackup()" style="background:#7f8c8d; color:white; padding:10px 15px; border-radius:5px; border:none; cursor:pointer;">📥 نسخة احتياطية</button>
+            <button onclick="document.getElementById('importFile').click()" style="background:#95a5a6; color:white; padding:8px 15px; border-radius:5px; border:none; cursor:pointer;">📤 استعادة</button>
+            <input type="file" id="importFile" style="display:none" onchange="importBackup(this)">
+        </div>
+    </div>
+</div>
+
+<div id="invoiceCapture">
+    <div style="border-bottom:2px solid #3498db; margin-bottom:10px;">
+        <h2 style="margin:0;">فاتورة مجمعة</h2>
+        <p id="invDate" style="font-size:12px;"></p>
+        <p>العميل: <span id="invCust"></span></p>
+    </div>
+    <table style="width:100%; border-collapse:collapse;">
+        <thead><tr><th>الصنف</th><th>كمية</th><th>سعر</th></tr></thead>
+        <tbody id="invBody"></tbody>
+    </table>
+    <h3 style="text-align:left; border-top:1px solid #000;">الإجمالي: <span id="invTotal"></span> ج.م</h3>
+</div>
+
+<script>
+    let scanner;
+    let selectedItems = new Set();
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+
+    async function addExp() {
+    const rIn = document.getElementById('expR');
+    const aIn = document.getElementById('expA');
     
-    <div class="card">
-        <h3>إضافة منتج جديد</h3>
-        <input type="text" id="name" placeholder="اسم الدواء">
-        <input type="number" id="price" placeholder="سعر البيع">
-        <input type="number" id="stock" placeholder="الكمية">
-        <button onclick="addProduct()">إضافة</button>
-    </div>
+    const reason = rIn.value.trim();
+    const amount = aIn.value;
 
-    <div class="card">
-        <h3>قائمة الأدوية</h3>
-        <ul id="productList"></ul>
-    </div>
+    if (!reason || !amount) return;
 
-    <script>
-        async function loadProducts() {
-            const res = await fetch('http://localhost:3000/products');
-            const data = await res.json();
-            const list = document.getElementById('productList');
-            list.innerHTML = data.map(p => `<li>${p.name} - السعر: ${p.sale_price} - المخزن: ${p.stock}</li>`).join('');
+    try {
+        // تعديل المسار هنا ليكون /add-expense ليتوافق مع السيرفر عندك
+        const response = await fetch('/add-expense', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                reason: reason, 
+                amount: amount 
+            })
+        });
+
+        if (response.ok) {
+            // تنفيذ خفي: تصفير الخانات فوراً
+            rIn.value = '';
+            aIn.value = '';
+            console.log("تم الخصم بنجاح");
+        } else {
+            alert("السيرفر رفض العملية، تأكد من البيانات");
         }
+    } catch (err) {
+        alert("فشل الاتصال بالسيرفر");
+    }
+}
 
-        async function addProduct() {
-            const product = {
-                name: document.getElementById('name').value,
-                sale_price: Number(document.getElementById('price').value),
-                stock: Number(document.getElementById('stock').value)
-            };
-            await fetch('http://localhost:3000/products', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(product)
-            });
-            loadProducts();
-        }
-        loadProducts();
-    </script>
+
+
+    async function load() {
+        const res = await fetch('/products');
+        const data = await res.json();
+        const body = document.getElementById('tableBody');
+        body.innerHTML = '';
+        data.forEach(p => {
+            if (p.isDeleted) return;
+            body.innerHTML += `
+                <tr id="row_${p.id}" class="${selectedItems.has(p.id) ? 'selected-row' : ''}">
+                    <td><input type="checkbox" onchange="toggleItem(${p.id})" ${selectedItems.has(p.id) ? 'checked' : ''}></td>
+                    <td onclick="showItemHistory('${p.name}')" class="p-name-link"><b>${p.name}</b></td>
+                    <td><input type="number" id="pr_${p.id}" value="${p.sale_price}" style="width:60px" onchange="updateTotal()"></td>
+                    <td><b id="st_${p.id}" style="color:${p.stock < 5 ? 'red':'green'}">${p.stock}</b></td>
+                    <td>
+                        <button class="qty-btn" onclick="changeQty(${p.id},-1)">-</button>
+                        <input type="number" id="qty_${p.id}" value="1" style="width:40px; text-align:center" onchange="updateTotal()">
+                        <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
+                    </td>
+                    <td><button onclick="del(${p.id})" style="background:none; border:none; cursor:pointer; font-size:18px;">🗑️</button></td>
+                </tr>`;
+        });
+        updateTotal();
+    }
+
+    function toggleItem(id) {
+        if (selectedItems.has(id)) selectedItems.delete(id);
+        else selectedItems.add(id);
+        document.getElementById(`row_${id}`).classList.toggle('selected-row');
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let total = 0; let count = 0;
+        selectedItems.forEach(id => {
+            const qty = document.getElementById(`qty_${id}`).value;
+            const price = document.getElementById(`pr_${id}`).value;
+            total += (qty * price); count++;
+        });
+        document.getElementById('bundleTotal').innerText = total;
+        document.getElementById('selectedCount').innerText = count;
+        document.getElementById('finalSellBtn').style.display = count > 0 ? 'inline-block' : 'none';
+        document.getElementById('finalDebtBtn').style.display = count > 0 ? 'inline-block' : 'none';
+    }
+
+    async function processBundleSale(type) {
+    const cName = document.getElementById('bundleCust').value || "عميل";
+    const cPhone = document.getElementById('bundlePhone').value;
+    
+    // التحقق من الكميات (كودك الأصلي)
+    for (let id of selectedItems) {
+        const stock = parseInt(document.getElementById('st_'+id).innerText);
+        const q = parseInt(document.getElementById('qty_'+id).value);
+        if (q > stock) return alert(`الكمية ناقصة في ${document.querySelector('#row_'+id+' b').innerText}`);
+    }
+
+    if (!confirm(`حفظ وإصدار فاتورة لـ ${selectedItems.size} أصناف؟`)) return;
+
+    // --- بداية الرسم البرمجي (المصمم الذاتي) ---
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 500;
+    canvas.height = 500 + (selectedItems.size * 40);
+    
+    // خلفية بيضاء صافية
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // رسم اللوجو خيال في النص (الأيقونة)
+    const img = new Image();
+    img.src = 'icon.png';
+    ctx.globalAlpha = 0.1; 
+    ctx.drawImage(img, 125, 150, 250, 250);
+    ctx.globalAlpha = 1.0;
+
+    // كتابة الهيدر
+    ctx.fillStyle = '#2c3e50';
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 26px Arial'; 
+    ctx.fillText('صيدلية /د/محمد', 250, 60);
+    
+    ctx.font = '18px Arial';
+    ctx.fillText(`العميل: ${cName}`, 250, 100);
+    ctx.fillText(`التاريخ: ${new Date().toLocaleString('ar-EG')}`, 250, 130);
+
+    let y = 200;
+    let total = 0;
+
+    // حلقة رسم الأصناف وتراكم الحساب
+selectedItems.forEach(id => {
+    // جلب الكمية كـ رقم (Integer) لضمان الحساب الصح
+    const q = parseInt(document.getElementById(`qty_${id}`).value); 
+    const p = parseFloat(document.getElementById(`pr_${id}`).value);
+    const name = document.querySelector(`#row_${id} b`).innerText;
+    
+    // حساب إجمالي الصنف (مثلاً 90 * 3 = 270)
+    const subTotal = q * p; 
+    total += subTotal; // إضافة الصنف للمجموع الكلي
+
+    ctx.textAlign = 'right';
+    ctx.font = '18px Arial';
+    // رسم الاسم مع الكمية الحقيقية (x3 مثلاً)
+    ctx.fillText(`${name} x${q}`, 450, y);
+    // رسم السعر الإجمالي للصنف
+    ctx.fillText(`${subTotal} ج.م`, 80, y);
+    
+    y += 40; // النزول سطر لضمان عدم تداخل الأصناف
+});
+
+
+    // الإجمالي النهائي والدعاء
+    ctx.beginPath(); ctx.moveTo(50, y); ctx.lineTo(450, y); ctx.stroke();
+    ctx.font = 'bold 22px Arial';
+    ctx.fillText(`الإجمالي: ${total} ج.م`, 250, y + 50);
+    
+    ctx.fillStyle = 'green';
+    ctx.textAlign = 'center'; 
+    ctx.fillText('نتمنى لك شفاءً عاجلاً لا يغادر سقماً 🌹', 250, y + 100);
+
+    // تحويل الرسم لصورة وتحميلها فوراً
+    const dataUrl = canvas.toDataURL("image/png");
+    const downloadLink = document.createElement('a');
+    downloadLink.download = `روشتة_${cName}.png`;
+    downloadLink.href = dataUrl;
+    downloadLink.click();
+    // --- نهاية الرسم ---
+
+    // إرسال البيانات للسيرفر (كودك الأصلي)
+    for (let id of selectedItems) {
+        const q = document.getElementById(`qty_${id}`).value;
+        const p = document.getElementById(`pr_${id}`).value;
+        await fetch('/sales', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ product_id: id, quantity: q, sale_price: p, customer_name: cName, customer_phone: cPhone }) });
+        if (type === 'debt') await fetch('/add-debt', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ customer_name: cName, amount: q*p, notes: 'روشتة آجل' }) });
+    }
+
+    if (cPhone) window.open(`https://wa.me/2${cPhone}?text=${encodeURIComponent('ألف سلامة عليك/ي.. دي الروشيتة')}`, '_blank');
+    
+    selectedItems.clear(); 
+    load(); 
+    alert("تم التصميم والبيع!");
+}
+
+
+    function generateStockImage() {
+        const limit = prompt("ادخل الحد الأقصى للنواقص:", "5");
+        if (limit === null) return;
+        const rows = document.querySelectorAll('#tableBody tr');
+        let hasLow = false;
+        rows.forEach(row => {
+            const stock = parseInt(row.querySelector('b[id^="st_"]').innerText);
+            if (stock < parseInt(limit)) { row.style.display = ''; hasLow = true; } else { row.style.display = 'none'; }
+        });
+        if (!hasLow) { alert("لا يوجد نواقص"); load(); return; }
+        html2canvas(document.querySelector("#mainTable")).then(canvas => {
+            const link = document.createElement('a'); link.download = `نواقص.png`; link.href = canvas.toDataURL(); link.click();
+            load();
+        });
+    }
+
+    async function addProduct() {
+        const d = { name: document.getElementById('newName').value, purchase_price: document.getElementById('newPurchase').value, sale_price: document.getElementById('newSale').value, stock: Number(document.getElementById('newStock').value), note: document.getElementById('newNote').value };
+        await fetch('/products', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(d) });
+        load();
+    }
+
+    function changeQty(id, delta) { let i = document.getElementById('qty_'+id); let v = parseInt(i.value) + delta; if(v > 0) i.value = v; updateTotal(); }
+    async function del(id) { if(confirm("حذف؟")) { await fetch('/delete-product', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id}) }); load(); } }
+    function filter() { let q = document.getElementById('search').value.toLowerCase(); document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none'); }
+    async function downloadBackup() {
+        const r1 = await fetch('/reports-data'); const d1 = await r1.json();
+        const r2 = await fetch('/products'); const d2 = await r2.json();
+        const backup = { products: d2, sales: d1.sales, expenses: d1.expenses };
+        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(backup)], {type:'application/json'})); a.download = `نسخة.json`; a.click();
+    }
+    function startScan() { document.getElementById('reader').style.display='block'; scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 }); scanner.render((txt) => { document.getElementById('search').value=txt; filter(); scanner.clear(); document.getElementById('reader').style.display='none'; }); }
+    function goDashboard() { if(prompt("Pass?") === "1") window.location.href='/dashboard'; }
+    load();
+</script>
 </body>
 </html>
-
