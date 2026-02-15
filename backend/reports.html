@@ -89,12 +89,13 @@
     let raw = { sales: [], expenses: [] }, debts = [], time = 'day', chart = null;
 
     async function init() {
-        const res = await fetch('/reports-data');
-        raw = await res.json();
-        const resDebts = await fetch('/debts-data');
-        debts = await resDebts.json();
-        process();
-    }
+    const res = await fetch('/backend/sales.json');
+    raw = await res.json();    
+    const resDebts = await fetch('/backend/debts.json');
+    debts = await resDebts.json();
+
+    process();
+}
 
     function setTime(f) { time = f; process(); }
 
