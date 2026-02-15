@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>التقارير المالية الكاملة</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background: #f4f7f6; padding: 20px; direction: rtl; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 20px; }
+        .card { background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; }
+        .card h3 { font-size: 14px; color: #7f8c8d; margin: 0; }
+        .card h2 { font-size: 22px; margin: 10px 0; }
+        .chart-container { background: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        table { width: 100%; background: white; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        th { background: #2c3e50; color: white; padding: 12px; }
+        td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; }
+        .filters { text-align: center; margin-bottom: 20px; }
+        .filters button { padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; margin: 0 5px; font-family: 'Cairo'; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>📊 سجل العمليات التفصيلي</h2>
+    <button onclick="window.location.href='/'" style="padding:10px 20px; border-radius:8px; background:#34495e; color:white; border:none; cursor:pointer; font-family:'Cairo';">🏠 العودة</button>
+</div>
+
+<div class="filters">
+    <button onclick="setTime('day')">اليوم</button>
+    <button onclick="setTime('week')">هذا الأسبوع</button>
+    <button onclick="setTime('month')">هذا الشهر</button>
+</div>
+
+<div class="grid">
+    <div class="card"><h3>الأرباح</h3><h2 id="pVal" style="color:#27ae60">0</h2></div>
+    <div class="card"><h3>الخسائر</h3><h2 id="lVal" style="color:#e74c3c">0</h2></div>
+    
+    <div class="card" onclick="showExpenseDetails()" style="cursor: pointer; border: 2px solid #f39c12;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <h3>المصروفات (التفاصيل 📖)</h3>
+        <h2 id="eVal" style="color:#f39c12">0</h2>
+    </div>
+
+    <div class="card"><h3 style="color:#e67e22">الديون (شكك) 🥵</h3><h2 id="debtVal" style="color:#e67e22">0</h2></div>
+    <div class="card" style="background:#1a252f; color:white;"><h3>صافي الكاش</h3><h2 id="realNet" style="color:#2ecc71">0</h2></div>
+</div>
+
+<input type="text" id="advSearch" oninput="process()" style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; margin-bottom:20px; box-sizing:border-box;" placeholder="🔍 ابحث عن عميل، دواء، أو رقم هاتف...">
+
+<div class="chart-container">
+    <canvas id="myChart" style="height: 300px;"></canvas>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>الوقت</th>
+            <th>الصنف</th>
+            <th>العميل</th>
+            <th>الهاتف</th>
+            <th>الكمية</th>
+            <th>سعر البيع</th>
+            <th>المكسب</th>
+            <th>الحالة</th>
+        </tr>
+    </thead>
+    <tbody id="logs"></tbody>
+</table>
+
+<div id="expModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; backdrop-filter: blur(5px);">
+    <div style="background:white; width:90%; max-width:550px; height:80%; border-radius:20px; padding:25px; overflow-y:auto; position:relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-top: 10px solid #f39c12;">
+        <button onclick="document.getElementById('expModal').style.display='none'" style="position:absolute; left:15px; top:15px; border:none; background:#e74c3c; color:white; border-radius:50%; width:35px; height:35px; cursor:pointer; font-weight:bold;">X</button>
+        <h2 style="text-align:center; color:#2c3e50; margin-bottom:20px;">📖 دفتر المصروفات التفصيلي</h2>
+        <table style="width:100%; border-collapse: collapse;">
+            <thead style="position:sticky; top:0; background:#f8f9fa;">
+                <tr style="border-bottom:2px solid #eee;">
+                    <th style="padding:10px; color:#333;">التاريخ</th>
+                    <th style="padding:10px; color:#333;">السبب</th>
+                    <th style="padding:10px; color:#333;">المبلغ</th>
+                </tr>
+            </thead>
+            <tbody id="expDetailBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let raw = { sales: [], expenses: [] }, debts = [], time = 'day', chart = null;
+
+    async function init() {
+        const res = await fetch('/reports-data');
+        raw = await res.json();
+        const resDebts = await fetch('/debts-data');
+        debts = await resDebts.json();
+        process();
+    }
+
+    function setTime(f) { time = f; process(); }
+
+    function showExpenseDetails() {
+        const modal = document.getElementById('expModal');
+        const body = document.getElementById('expDetailBody');
+        modal.style.display = 'flex';
+        body.innerHTML = '';
+        
+        // ترتيب المصروفات من الأحدث للأقدم
+        const sortedExpenses = [...raw.expenses].reverse();
+        
+        sortedExpenses.forEach(ex => {
+            const d = new Date(ex.date);
+            body.innerHTML += `
+                <tr style="border-bottom:1px solid #f1f1f1;">
+                    <td style="padding:12px; font-size:12px; color:#666;">${d.toLocaleDateString('ar-EG')}<br>${d.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</td>
+                    <td style="padding:12px; font-weight:bold;">${ex.reason}</td>
+                    <td style="padding:12px; color:#e74c3c; font-weight:bold;">${ex.amount} ج.م</td>
+                </tr>`;
+        });
+        if(raw.expenses.length === 0) body.innerHTML = '<tr><td colspan="3">لا توجد مصروفات</td></tr>';
+    }
+
+    function process() {
+        const q = document.getElementById('advSearch').value.toLowerCase();
+        const now = new Date();
+        
+        let sales = raw.sales.filter(s => {
+            const d = new Date(s.date);
+            const match = s.product_name.toLowerCase().includes(q) || s.customer_name.toLowerCase().includes(q) || (s.customer_phone && s.customer_phone.includes(q));
+            if(time === 'day') return d.toDateString() === now.toDateString() && match;
+            if(time === 'week') return (now - d) < 7*24*60*60*1000 && match;
+            return match;
+        });
+
+        let filteredDebts = debts.filter(d => {
+            const dateObj = new Date(d.date);
+            const match = d.customer_name.toLowerCase().includes(q) || (d.customer_phone && d.customer_phone.includes(q));
+            if(time === 'day') return dateObj.toDateString() === now.toDateString() && match;
+            if(time === 'week') return (now - dateObj) < 7*24*60*60*1000 && match;
+            return match;
+        });
+
+        let pT = 0, lT = 0;
+        sales.forEach(s => {
+            let val = Number(s.profit_loss) || 0;
+            if(val > 0) pT += val; else lT += Math.abs(val);
+        });
+
+        let dTotal = filteredDebts.filter(x => !x.isPaid).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+        const todayStr = new Date().toISOString().split('T')[0];
+        let eTotal = raw.expenses.filter(e => {
+        const eDate = e.date && e.date.split('T')[0];
+        if (time === 'day') return eDate === todayStr;
+        const dateObj = new Date(e.date);
+        const now = new Date();
+        if (time === 'week') return (now - dateObj) < 7*24*60*60*1000;
+        if (time === 'month') return (now - dateObj) < 30*24*60*60*1000;
+        return true; 
+        }).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+   
+         
+        document.getElementById('pVal').innerText = pT + " ج.م";
+        document.getElementById('lVal').innerText = lT + " ج.م";
+        document.getElementById('eVal').innerText = eTotal + " ج.م";
+        document.getElementById('debtVal').innerText = dTotal + " ج.م";
+        document.getElementById('realNet').innerText = (pT - eTotal) + " ج.م";
+
+        const body = document.getElementById('logs');
+        body.innerHTML = '';
+        sales.forEach(s => {
+            let v = Number(s.profit_loss) || 0;
+            const isDebt = debts.some(d => d.customer_name === s.customer_name && Math.abs(d.amount - (s.actual_sell_price * s.quantity)) < 0.1 && !d.isPaid);
+            body.innerHTML += `<tr>
+                <td>${new Date(s.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</td>
+                <td><b>${s.product_name}</b></td>
+                <td>${s.customer_name}</td>
+                <td>${s.customer_phone || '---'}</td>
+                <td>${s.quantity}</td>
+                <td>${s.actual_sell_price}</td>
+                <td style="color:${v>=0?'green':'red'}">${Math.abs(v)}</td>
+                <td style="color:${isDebt ? '#e67e22' : '#27ae60'}">${isDebt ? 'آجل 🥵' : 'كاش'}</td>
+            </tr>`;
+        });
+        updateChart(sales);
+    }
+
+    function updateChart(data) {
+        const ctx = document.getElementById('myChart');
+        if(chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: { 
+                labels: data.map(x=>new Date(x.date).toLocaleTimeString()), 
+                datasets: [{ label: 'صافي حركة المبيعات', data: data.map(x=>x.profit_loss), borderColor: '#3498db', fill: true, backgroundColor: 'rgba(52, 152, 219, 0.1)', tension: 0.4 }] 
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+    init();
+</script>
+</body>
+</html>
+

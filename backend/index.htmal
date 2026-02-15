@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة الصيدلية الذكية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root { --main: #2c3e50; --success: #27ae60; --danger: #e74c3c; --bg: #f8f9fa; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; padding: 20px; direction: rtl; }
+        .container { max-width: 1250px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 12px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+        .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; cursor: pointer; background: #f8f9fa; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #3498db; color: white; padding: 12px; }
+        td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+        .quick-stats { display: flex; gap: 20px; margin-top: 20px; padding: 15px; background: #eef2f3; border-radius: 12px; }
+        .stat-item { flex: 1; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>💊 نظام إدارة المخزن الذكي</h2>
+
+    <div class="form-row">
+        <input type="text" id="newName" placeholder="اسم الدواء">
+        <input type="number" id="newPurchase" placeholder="الشراء">
+        <input type="number" id="newSale" placeholder="البيع">
+        <input type="number" id="newStock" placeholder="الكمية">
+        <input type="text" id="newExpiry" placeholder="الصلاحية">
+        <input type="text" id="newNote" placeholder="ملاحظة هامة">
+        <button onclick="addProduct()" style="background:var(--success); color:white; border-radius:8px; cursor:pointer;">إضافة</button>
+    </div>
+
+    <input type="text" id="search" style="width:100%; padding:12px; margin-bottom:15px;" placeholder="🔍 ابحث هنا..." onkeyup="filter()">
+
+    <table>
+        <thead>
+            <tr>
+                <th>الاسم والملاحظة</th>
+                <th>سعر البيع</th>
+                <th>المخزن</th>
+                <th>الكمية</th>
+                <th>العميل / الرقم</th>
+                <th>إدارة</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <div class="quick-stats">
+        <div class="stat-item">إجمالي الأصناف: <span id="count">0</span></div>
+        <div class="stat-item">نواقص (أقل من 5): <span id="lowStock" style="color:red">0</span></div>
+        <button onclick="generateStockImage()" style="background:var(--danger); color:white; padding:10px 20px; border-radius:10px; cursor:pointer; margin-left:10px;">📸 صورة النواقص</button>
+        <button onclick="window.location.href='/debts.html'" style="background:#e67e22; color:white; padding:10px 20px; border-radius:10px; cursor:pointer; margin-left:10px;">📝 دفتر الشكك</button>
+        <button onclick="goDashboard()" style="background:var(--main); color:white; padding:10px 30px; border-radius:10px; cursor:pointer;">📊 التقارير (محمي)</button>
+    </div>
+
+    <div style="margin-top:20px; border:1px solid #ffcccc; padding:15px; border-radius:10px;">
+        <h4 style="margin:0 0 10px 0; color:var(--danger)">💸 تسجيل مصروفات سريعة</h4>
+        <input type="text" id="expR" placeholder="السبب"> <input type="number" id="expA" placeholder="المبلغ">
+        <button onclick="addExp()" style="background:var(--danger); color:white; padding:8px; border-radius:5px; cursor:pointer;">خصم الآن</button>
+    </div>
+</div>
+
+<div id="printArea" style="display:none; direction:rtl; font-family:Arial; padding:20px; border:2px solid #000;">
+    <h2 style="text-align:center;">🧾 فاتورة صيدلية</h2>
+    <p>التاريخ: <span id="pf_date"></span></p>
+    <hr>
+    <p>اسم الدواء: <b id="pf_name"></b></p>
+    <p>الكمية: <b id="pf_qty"></b></p>
+    <p>سعر الوحدة: <b id="pf_price"></b> ج.م</p>
+    <hr>
+    <h3>إجمالي المطلـوب: <span id="pf_total"></span> ج.م</h3>
+    <p style="text-align:center;">شكراً لثقتكم - نتمنى لكم الشفاء</p>
+</div>
+
+<script>
+    async function load() {
+        const res = await fetch('/products');
+        const data = await res.json();
+        const body = document.getElementById('tableBody');
+        body.innerHTML = '';
+        let low = 0;
+        data.forEach(p => {
+            if (p.isDeleted) return;
+            const isLow = p.stock < 5;
+            if(isLow) low++;
+            const rowBg = isLow ? 'style="background-color: #fff0f0;"' : '';
+
+            body.innerHTML += `
+                <tr id="row_${p.id}" ${rowBg}>
+                    <td><b class="p-name">${p.name}</b><br><small style="color:blue">${p.note || ''}</small></td>
+                    <td><input type="number" id="pr_${p.id}" value="${p.sale_price}" style="width:60px"></td>
+                    <td><b style="color:${isLow ? 'red':'green'}">${p.stock}</b></td>
+                    <td>
+                        <button class="qty-btn" onclick="changeQty(${p.id},-1)">-</button>
+                        <input type="number" id="qty_${p.id}" value="1" style="width:40px; text-align:center">
+                        <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
+                    </td>
+                    <td>
+                        <input type="text" id="cn_${p.id}" placeholder="العميل" style="width:70px">
+                        <input type="text" id="cp_${p.id}" placeholder="الرقم" style="width:80px">
+                        <div style="display:flex; gap:3px; margin-top:5px;">
+                            <button onclick="sell(${p.id}, 'cash')" style="background:#f1c40f; border:none; padding:5px; cursor:pointer; border-radius:5px; flex:1; font-size:12px;">بيع</button>
+                            <button onclick="sell(${p.id}, 'debt')" style="background:#e67e22; border:none; padding:5px; color:white; cursor:pointer; border-radius:5px; flex:1; font-size:11px;">آجل 🥵</button>
+                        </div>
+                    </td>
+                    <td><button onclick="del(${p.id})" style="background:none; cursor:pointer; font-size:18px;">🗑️</button></td>
+                </tr>`;
+        });
+        document.getElementById('count').innerText = data.filter(x=>!x.isDeleted).length;
+        document.getElementById('lowStock').innerText = low;
+    }
+
+    async function generateStockImage() {
+        const res = await fetch('/products');
+        const data = await res.json();
+        const lowStockItems = data.filter(p => p.stock < 5 && !p.isDeleted);
+        
+        if(lowStockItems.length === 0) return alert("لا توجد نواقص حالياً");
+
+        let modalHTML = `
+            <div id="modalOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:9999; direction:rtl;">
+                <div style="background:white; padding:20px; border-radius:15px; width:90%; max-width:500px;">
+                    <div id="captureArea" style="padding:15px; background:white;">
+                        <h2 style="text-align:center; color:#2c3e50; border-bottom:2px solid #3498db; margin-bottom:15px; padding-bottom:10px;">📋 طلبية نواقص الصيدلية</h2>
+                        <table border="1" style="width:100%; border-collapse:collapse; text-align:center;">
+                            <thead style="background:#f8f9fa;">
+                                <tr><th>الصنف</th><th>الرصيد</th><th>الكمية المطلوبة</th></tr>
+                            </thead>
+                            <tbody>
+                                ${lowStockItems.map(i => `
+                                    <tr>
+                                        <td style="padding:8px;"><b>${i.name}</b></td>
+                                        <td style="padding:8px; color:red;">${i.stock}</td>
+                                        <td style="padding:8px;"><input type="number" class="order-qty" placeholder="0" style="width:60px; text-align:center; border:1px solid #ddd;"></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="text-align:center; margin-top:20px;">
+                        <button id="doCapture" style="background:#27ae60; color:white; padding:10px 25px; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">📸 حفظ كصورة</button>
+                        <button onclick="document.getElementById('modalOverlay').remove()" style="background:#95a5a6; color:white; padding:10px 25px; border:none; border-radius:8px; cursor:pointer; margin-right:10px;">إغلاق</button>
+                    </div>
+                </div>
+            </div>`;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        document.getElementById('doCapture').onclick = function() {
+            const inputs = document.querySelectorAll('.order-qty');
+            inputs.forEach(input => {
+                const val = input.value || "0";
+                const textNode = document.createElement('b');
+                textNode.innerText = val;
+                textNode.style.color = "#27ae60";
+                input.parentNode.replaceChild(textNode, input);
+            });
+
+            html2canvas(document.getElementById('captureArea')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `نواقص_${new Date().toLocaleDateString()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                document.getElementById('modalOverlay').remove();
+                alert("تم حفظ الصورة بنجاح!");
+            });
+        };
+    }
+
+    function changeQty(id, v) { let el = document.getElementById('qty_'+id); el.value = Math.max(1, Number(el.value) + v); }
+
+    async function addProduct(force=false) {
+        const d = { 
+            name: document.getElementById('newName').value, 
+            purchase_price: document.getElementById('newPurchase').value, 
+            sale_price: document.getElementById('newSale').value, 
+            stock: Number(document.getElementById('newStock').value),
+            note: document.getElementById('newNote').value,
+            force: force 
+        };
+        const res = await fetch('/products', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(d) });
+        const resJ = await res.json();
+        if(resJ.askToMerge) { if(confirm("المنتج موجود، دمج؟")) addProduct(true); } else { load(); clearInputs(); }
+    }
+
+    function clearInputs() {
+        document.getElementById('newName').value = ''; document.getElementById('newPurchase').value = '';
+        document.getElementById('newSale').value = ''; document.getElementById('newStock').value = '';
+        document.getElementById('newNote').value = '';
+    }
+
+    async function sell(id, type = 'cash') {
+        const qty = document.getElementById('qty_'+id).value;
+        const price = document.getElementById('pr_'+id).value;
+        const cName = document.getElementById('cn_'+id).value || "عميل محترم";
+        const cPhone = document.getElementById('cp_'+id).value || "---";
+        const dName = document.querySelector(`#row_${id} .p-name`).innerText;
+
+        const d = { product_id: id, quantity: qty, sale_price: price, customer_name: cName, customer_phone: cPhone };
+        const res = await fetch('/sales', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(d) });
+        
+        if(res.ok) { 
+            if(type === 'debt') {
+                const debtData = {
+                    customer_name: cName,
+                    customer_phone: cPhone,
+                    amount: Number(qty) * Number(price),
+                    notes: `آجل: ${dName}`
+                };
+                await fetch('/add-debt', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(debtData) });
+                alert("تم البيع وتسجيل المديونية بنجاح");
+            } else {
+                alert("تمت عملية البيع النقدي");
+            }
+
+            if(cPhone && cPhone.trim() !== "" && cPhone !== "---") {
+                if(confirm("هل تريد إرسال فاتورة واتساب للعميل؟")) {
+                    const total = Number(qty) * Number(price);
+                    const statusText = type === 'debt' ? "(آجل - مديونية)" : "(كاش)";
+                    const message = `*🧾 فاتورة صيدلية*%0A*الحالة:* ${statusText}%0A*العميل:* ${cName}%0A*الصنف:* ${dName}%0A*الكمية:* ${qty}%0A*الإجمالي:* ${total} ج.م%0A*شكراً لثقتكم*`;
+                    window.open(`https://wa.me/2${cPhone}?text=${message}`, '_blank');
+                }
+            }
+            load(); 
+        } else { 
+            const ej = await res.json(); alert(ej.message); 
+        }
+    }
+
+    async function del(id) { if(confirm("حذف؟")) { await fetch('/delete-product', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id}) }); load(); } }
+
+    async function addExp() {
+        const reason = document.getElementById('expR').value;
+        const amount = document.getElementById('expA').value;
+        await fetch('/add-expense', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({reason, amount}) });
+        alert("تم الخصم"); load();
+    }
+
+    function goDashboard() { if(prompt("أدخل كلمة السر:") === "1") window.location.href='/dashboard'; else alert("خطأ!"); }
+    function filter() { 
+        let q = document.getElementById('search').value.toLowerCase(); 
+        document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none'); 
+    }
+    load();
+</script>
+</body>
+</html>
+

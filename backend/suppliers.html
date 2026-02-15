@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>حسابات الموردين والشركات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #34495e; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; }
+        body { font-family: 'Cairo', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h2 { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px; text-align: center; }
+        
+        .add-form { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px; background: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
+        input, button { padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Cairo'; }
+        .add-btn { background: var(--primary); color: white; cursor: pointer; border: none; }
+        .back-btn { background: #95a5a6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; display: inline-block; margin-bottom: 15px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: var(--primary); color: white; padding: 12px; }
+        td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; }
+        
+        .status-unpaid { color: var(--danger); font-weight: bold; }
+        .status-paid { color: var(--success); font-weight: bold; }
+        .pay-btn { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
+        
+        .summary { display: flex; gap: 20px; margin-top: 20px; background: #e8f4fd; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="/" class="back-btn">🔙 العودة للمخزن</a>
+    <h2>🏢 سجل حسابات شركات التوريد</h2>
+
+    <div class="add-form">
+        <input type="text" id="compName" placeholder="اسم الشركة (مثال: المتحدة)">
+        <input type="number" id="billAmount" placeholder="قيمة الفاتورة">
+        <input type="date" id="dueDate">
+        <button class="add-btn" onclick="addSupplierDebt()">➕ إضافة فاتورة</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>تاريخ التوريد</th>
+                <th>الشركة</th>
+                <th>المبلغ</th>
+                <th>موعد السداد</th>
+                <th>الحالة</th>
+                <th>إدارة</th>
+            </tr>
+        </thead>
+        <tbody id="suppliersBody"></tbody>
+    </table>
+
+    <div class="summary">
+        إجمالي مديونيات الشركات: <span id="totalSuppDebts" style="color:var(--danger); margin-right:10px;">0</span> ج.م
+    </div>
+</div>
+
+<script>
+    // جلب البيانات عند التحميل
+    async function loadSuppliers() {
+        const res = await fetch('/suppliers-data');
+        const data = await res.json();
+        const body = document.getElementById('suppliersBody');
+        body.innerHTML = '';
+        
+        let total = 0;
+        data.sort((a,b) => new Date(a.due_date) - new Date(b.due_date)).forEach(s => {
+            if(!s.isPaid) total += Number(s.amount);
+
+            body.innerHTML += `
+                <tr>
+                    <td>${new Date(s.date).toLocaleDateString('ar-EG')}</td>
+                    <td><b>${s.company_name}</b></td>
+                    <td>${s.amount} ج.م</td>
+                    <td style="color:${new Date(s.due_date) < new Date() && !s.isPaid ? 'red' : 'black'}">
+                        ${s.due_date || '---'}
+                    </td>
+                    <td class="${s.isPaid ? 'status-paid' : 'status-unpaid'}">
+                        ${s.isPaid ? 'تم السداد ✅' : 'مستحق الدفع ⏳'}
+                    </td>
+                    <td>
+                        ${s.isPaid ? '---' : `<button class="pay-btn" onclick="paySupplier(${s.id})">تسديد</button>`}
+                    </td>
+                </tr>
+            `;
+        });
+        document.getElementById('totalSuppDebts').innerText = total.toFixed(2);
+    }
+
+    // إضافة فاتورة جديدة
+    async function addSupplierDebt() {
+        const company_name = document.getElementById('compName').value;
+        const amount = document.getElementById('billAmount').value;
+        const due_date = document.getElementById('dueDate').value;
+
+        if(!company_name || !amount) return alert("يرجى إدخال اسم الشركة والمبلغ");
+
+        const res = await fetch('/add-supplier-debt', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ company_name, amount, due_date })
+        });
+
+        if(res.ok) {
+            alert("تم تسجيل الفاتورة بنجاح");
+            document.getElementById('compName').value = '';
+            document.getElementById('billAmount').value = '';
+            loadSuppliers();
+        }
+    }
+
+    // تسديد فاتورة
+    async function paySupplier(id) {
+        if(confirm("هل قمت بتسديد هذه الفاتورة للشركة فعلياً؟")) {
+            const res = await fetch('/pay-supplier', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id })
+            });
+            if(res.ok) {
+                alert("تم تحديث الحالة إلى (تم السداد)");
+                loadSuppliers();
+            }
+        }
+    }
+
+    loadSuppliers();
+</script>
+
+</body>
+</html>
+

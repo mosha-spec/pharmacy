@@ -1,0 +1,135 @@
+[
+  {
+    "id": 1770903546943,
+    "customer_name": "محمد",
+    "customer_phone": "01025234025",
+    "amount": 22,
+    "notes": "آجل: ؤؤ",
+    "isPaid": true,
+    "date": "2026-02-12T13:39:06.943Z"
+  },
+  {
+    "id": 1770903600601,
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "amount": 15,
+    "notes": "آجل: بنادول",
+    "isPaid": true,
+    "date": "2026-02-12T13:40:00.601Z"
+  },
+  {
+    "id": 1770903602433,
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "amount": 15,
+    "notes": "آجل: بنادول",
+    "isPaid": true,
+    "date": "2026-02-12T13:40:02.433Z"
+  },
+  {
+    "id": 1770903606149,
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "amount": 122,
+    "notes": "آجل: رز",
+    "isPaid": true,
+    "date": "2026-02-12T13:40:06.149Z"
+  },
+  {
+    "id": 1770903607701,
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "amount": 100,
+    "notes": "آجل: بطلي",
+    "isPaid": true,
+    "date": "2026-02-12T13:40:07.701Z"
+  },
+  {
+    "id": 1770908228362,
+    "customer_name": "محمد ",
+    "amount": 100,
+    "notes": "آجل",
+    "isPaid": true,
+    "date": "2026-02-12T14:57:08.362Z"
+  },
+  {
+    "id": 1770908751715,
+    "customer_name": "عميل محترم",
+    "amount": 100,
+    "notes": "آجل",
+    "isPaid": true,
+    "date": "2026-02-12T15:05:51.715Z"
+  },
+  {
+    "id": 1770908754347,
+    "customer_name": "عميل محترم",
+    "amount": 122,
+    "notes": "آجل",
+    "isPaid": true,
+    "date": "2026-02-12T15:05:54.347Z"
+  },
+  {
+    "id": 1770908757195,
+    "customer_name": "عميل محترم",
+    "amount": 90,
+    "notes": "آجل",
+    "isPaid": true,
+    "date": "2026-02-12T15:05:57.195Z"
+  },
+  {
+    "id": 1770908955610,
+    "customer_name": "عميل محترم",
+    "amount": 0,
+    "notes": "آجل",
+    "isPaid": true,
+    "date": "2026-02-12T15:09:15.610Z"
+  },
+  {
+    "id": 1770908958187,
+    "customer_name": "عميل محترم",
+    "amount": 0,
+    "notes": "آجل",
+    "isPaid": true,
+    "date": "2026-02-12T15:09:18.187Z"
+  },
+  {
+    "id": 1770908961114,
+    "customer_name": "عميل محترم",
+    "amount": 90,
+    "notes": "آجل",
+    "isPaid": false,
+    "date": "2026-02-12T15:09:21.114Z"
+  },
+  {
+    "id": 1770908962184,
+    "customer_name": "عميل محترم",
+    "amount": 90,
+    "notes": "آجل",
+    "isPaid": false,
+    "date": "2026-02-12T15:09:22.184Z"
+  },
+  {
+    "id": 1770911882318,
+    "customer_name": "Mohamed ",
+    "amount": 90,
+    "notes": "روشتة آجل",
+    "isPaid": false,
+    "date": "2026-02-12T15:58:02.318Z"
+  },
+  {
+    "id": 1770911882336,
+    "customer_name": "Mohamed ",
+    "amount": 100,
+    "notes": "روشتة آجل",
+    "isPaid": false,
+    "date": "2026-02-12T15:58:02.336Z"
+  },
+  {
+    "id": 1771094443759,
+    "customer_name": "عميل",
+    "amount": 100,
+    "notes": "روشتة آجل",
+    "isPaid": false,
+    "date": "2026-02-14T18:40:43.759Z"
+  }
+]

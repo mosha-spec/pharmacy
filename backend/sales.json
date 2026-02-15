@@ -1,0 +1,969 @@
+[
+  {
+    "id": 1770821584925,
+    "product_name": "بنادول ",
+    "customer_name": "عميل نقدي",
+    "quantity": 1,
+    "sale_price": 4000,
+    "profit": 3988,
+    "date": "2026-02-11T14:53:04.925Z"
+  },
+  {
+    "id": 1770821623362,
+    "product_name": "بنادول ",
+    "customer_name": "محمد",
+    "quantity": 1,
+    "sale_price": 4000,
+    "profit": 3988,
+    "date": "2026-02-11T14:53:43.362Z"
+  },
+  {
+    "id": 1770824773806,
+    "product_name": "بنادول ",
+    "customer_name": "عميل نقدي",
+    "quantity": 1,
+    "sale_price": 15,
+    "profit": 3,
+    "date": "2026-02-11T15:46:13.806Z"
+  },
+  {
+    "id": 1770827464451,
+    "product_name": "بنادول ",
+    "customer_name": "محمد",
+    "customer_phone": "0102525",
+    "quantity": 1,
+    "sale_price": 15,
+    "profit": 3,
+    "date": "2026-02-11T16:31:04.451Z"
+  },
+  {
+    "id": 1770828009023,
+    "product_name": "بنادول ",
+    "customer_name": "محمد",
+    "customer_phone": "01025234025",
+    "quantity": 30,
+    "sale_price": 155,
+    "profit": 4290,
+    "date": "2026-02-11T16:40:09.023Z"
+  },
+  {
+    "id": 1770836406524,
+    "product_name": "اكس ",
+    "customer_name": "أسامة ",
+    "customer_phone": "01025235325",
+    "quantity": 8,
+    "sale_price": 20,
+    "profit": 80,
+    "date": "2026-02-11T19:00:06.524Z"
+  },
+  {
+    "id": 1770836666746,
+    "product_name": "سيز",
+    "customer_name": "خديجه ",
+    "customer_phone": "55555",
+    "quantity": 1,
+    "sale_price": 8,
+    "profit": -2,
+    "date": "2026-02-11T19:04:26.746Z"
+  },
+  {
+    "id": 1770836670759,
+    "product_name": "سيز",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 9,
+    "sale_price": 8,
+    "profit": -18,
+    "date": "2026-02-11T19:04:30.759Z"
+  },
+  {
+    "id": 1770836858399,
+    "product_name": "سيز",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "sale_price": 8,
+    "profit": -2,
+    "date": "2026-02-11T19:07:38.399Z"
+  },
+  {
+    "id": 1770836871372,
+    "product_name": "سيز",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "sale_price": 8,
+    "profit": -2,
+    "date": "2026-02-11T19:07:51.372Z"
+  },
+  {
+    "id": 1770836872945,
+    "product_name": "سيز",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "sale_price": 8,
+    "profit": -2,
+    "date": "2026-02-11T19:07:52.945Z"
+  },
+  {
+    "id": 1770836874157,
+    "product_name": "سيز",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "sale_price": 8,
+    "profit": -2,
+    "date": "2026-02-11T19:07:54.157Z"
+  },
+  {
+    "id": 1770887795858,
+    "product_name": "بنادولاا",
+    "customer_name": "محمد",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 555,
+    "profit_loss": 300,
+    "date": "2026-02-12T09:16:35.858Z"
+  },
+  {
+    "id": 1770888886641,
+    "product_name": "اكس ",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 20,
+    "profit_loss": 10,
+    "date": "2026-02-12T09:34:46.641Z"
+  },
+  {
+    "id": 1770888891295,
+    "product_name": "اكس ",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 20,
+    "profit_loss": 10,
+    "date": "2026-02-12T09:34:51.295Z"
+  },
+  {
+    "id": 1770888893730,
+    "product_name": "بنادول ",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 155,
+    "profit_loss": 143,
+    "date": "2026-02-12T09:34:53.730Z"
+  },
+  {
+    "id": 1770888895006,
+    "product_name": "بنادول ",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 155,
+    "profit_loss": 143,
+    "date": "2026-02-12T09:34:55.006Z"
+  },
+  {
+    "id": 1770888925155,
+    "product_name": "سس",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 5,
+    "actual_sell_price": 8,
+    "profit_loss": -20,
+    "date": "2026-02-12T09:35:25.155Z"
+  },
+  {
+    "id": 1770889962072,
+    "product_name": "بنادول ",
+    "customer_name": "اسامة",
+    "customer_phone": "01025234012",
+    "quantity": 8,
+    "actual_sell_price": 15,
+    "profit_loss": 24,
+    "date": "2026-02-12T09:52:42.072Z"
+  },
+  {
+    "id": 1770890016471,
+    "product_name": "بنادول ",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 1,
+    "profit_loss": -11,
+    "date": "2026-02-12T09:53:36.472Z"
+  },
+  {
+    "id": 1770894327746,
+    "product_name": "بنادول ",
+    "customer_name": "نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:05:27.746Z"
+  },
+  {
+    "id": 1770894337979,
+    "product_name": "بنادول ",
+    "customer_name": "اسامة",
+    "customer_phone": "01025234012",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:05:37.979Z"
+  },
+  {
+    "id": 1770894970240,
+    "product_name": "بطلي",
+    "customer_name": "محمد ",
+    "customer_phone": "01025234025",
+    "quantity": 2,
+    "actual_sell_price": 100,
+    "profit_loss": 170,
+    "date": "2026-02-12T11:16:10.240Z"
+  },
+  {
+    "id": 1770896040919,
+    "product_name": "بطلي",
+    "customer_name": "محمد ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T11:34:00.919Z"
+  },
+  {
+    "id": 1770896847338,
+    "product_name": "بنادولاا",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 555,
+    "profit_loss": 300,
+    "date": "2026-02-12T11:47:27.339Z"
+  },
+  {
+    "id": 1770896880186,
+    "product_name": "بطلي",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T11:48:00.186Z"
+  },
+  {
+    "id": 1770896881862,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:48:01.862Z"
+  },
+  {
+    "id": 1770897202713,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:53:22.713Z"
+  },
+  {
+    "id": 1770897207127,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:53:27.127Z"
+  },
+  {
+    "id": 1770897211085,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "01025234012",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:53:31.085Z"
+  },
+  {
+    "id": 1770897217531,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:53:37.531Z"
+  },
+  {
+    "id": 1770897220807,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "01025234012",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:53:40.807Z"
+  },
+  {
+    "id": 1770897225936,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "01025234012",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T11:53:45.936Z"
+  },
+  {
+    "id": 1770897749109,
+    "product_name": "بنادول ",
+    "customer_name": "ااتت",
+    "customer_phone": "01025234012",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T12:02:29.109Z"
+  },
+  {
+    "id": 1770898462875,
+    "product_name": "بطلي",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T12:14:22.875Z"
+  },
+  {
+    "id": 1770898464725,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T12:14:24.725Z"
+  },
+  {
+    "id": 1770898466160,
+    "product_name": "بطلي",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T12:14:26.160Z"
+  },
+  {
+    "id": 1770898467613,
+    "product_name": "بطلي",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T12:14:27.613Z"
+  },
+  {
+    "id": 1770898470108,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T12:14:30.108Z"
+  },
+  {
+    "id": 1770898602527,
+    "product_name": "رز",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 122,
+    "profit_loss": 104,
+    "date": "2026-02-12T12:16:42.527Z"
+  },
+  {
+    "id": 1770899521113,
+    "product_name": "بطلي",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": -15,
+    "date": "2026-02-12T12:32:01.113Z"
+  },
+  {
+    "id": 1770903531004,
+    "product_name": "رز",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 122,
+    "profit_loss": 104,
+    "date": "2026-02-12T13:38:51.004Z"
+  },
+  {
+    "id": 1770903534428,
+    "product_name": "ؤؤ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 22,
+    "profit_loss": 20,
+    "date": "2026-02-12T13:38:54.428Z"
+  },
+  {
+    "id": 1770903546926,
+    "product_name": "ؤؤ",
+    "customer_name": "محمد",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 22,
+    "profit_loss": 20,
+    "date": "2026-02-12T13:39:06.926Z"
+  },
+  {
+    "id": 1770903600586,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T13:40:00.586Z"
+  },
+  {
+    "id": 1770903602424,
+    "product_name": "بنادول ",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 15,
+    "profit_loss": 3,
+    "date": "2026-02-12T13:40:02.424Z"
+  },
+  {
+    "id": 1770903606134,
+    "product_name": "رز",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 122,
+    "profit_loss": 104,
+    "date": "2026-02-12T13:40:06.134Z"
+  },
+  {
+    "id": 1770903607675,
+    "product_name": "بطلي",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T13:40:07.675Z"
+  },
+  {
+    "id": 1770904901479,
+    "product_name": "Yhyh",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T14:01:41.479Z"
+  },
+  {
+    "id": 1770906900224,
+    "product_name": "بطلي",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T14:35:00.224Z"
+  },
+  {
+    "id": 1770906903140,
+    "product_name": "بطلي",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T14:35:03.140Z"
+  },
+  {
+    "id": 1770906905796,
+    "product_name": "رز",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 122,
+    "profit_loss": 104,
+    "date": "2026-02-12T14:35:05.796Z"
+  },
+  {
+    "id": 1770906907912,
+    "product_name": "اا",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 88,
+    "profit_loss": 86,
+    "date": "2026-02-12T14:35:07.912Z"
+  },
+  {
+    "id": 1770906951372,
+    "product_name": "Yhyh",
+    "customer_name": "Mohamed",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T14:35:51.372Z"
+  },
+  {
+    "id": 1770908228336,
+    "product_name": "بطلي",
+    "customer_name": "محمد ",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T14:57:08.336Z"
+  },
+  {
+    "id": 1770908233089,
+    "product_name": "بطلي",
+    "customer_name": "محمد ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T14:57:13.089Z"
+  },
+  {
+    "id": 1770908751693,
+    "product_name": "بطلي",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T15:05:51.694Z"
+  },
+  {
+    "id": 1770908754333,
+    "product_name": "رز",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 122,
+    "profit_loss": 104,
+    "date": "2026-02-12T15:05:54.333Z"
+  },
+  {
+    "id": 1770908757179,
+    "product_name": "Yhyh",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T15:05:57.179Z"
+  },
+  {
+    "id": 1770908758947,
+    "product_name": "Yhyh",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T15:05:58.947Z"
+  },
+  {
+    "id": 1770908952774,
+    "product_name": "",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T15:09:12.774Z"
+  },
+  {
+    "id": 1770908955597,
+    "product_name": "Q",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T15:09:15.597Z"
+  },
+  {
+    "id": 1770908958168,
+    "product_name": "U",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T15:09:18.168Z"
+  },
+  {
+    "id": 1770908961106,
+    "product_name": "Yhyh",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T15:09:21.106Z"
+  },
+  {
+    "id": 1770908962175,
+    "product_name": "Yhyh",
+    "customer_name": "عميل محترم",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T15:09:22.175Z"
+  },
+  {
+    "id": 1770909798930,
+    "product_name": "اااا",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 555555,
+    "profit_loss": 555333,
+    "date": "2026-02-12T15:23:18.930Z"
+  },
+  {
+    "id": 1770911276507,
+    "product_name": "اااا",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 555555,
+    "profit_loss": 555333,
+    "date": "2026-02-12T15:47:56.507Z"
+  },
+  {
+    "id": 1770911276518,
+    "product_name": "Rr",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T15:47:56.518Z"
+  },
+  {
+    "id": 1770911276529,
+    "product_name": "T",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T15:47:56.529Z"
+  },
+  {
+    "id": 1770911276537,
+    "product_name": "U",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T15:47:56.537Z"
+  },
+  {
+    "id": 1770911276545,
+    "product_name": "Q",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T15:47:56.545Z"
+  },
+  {
+    "id": 1770911276567,
+    "product_name": "Yhyh",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T15:47:56.567Z"
+  },
+  {
+    "id": 1770911276582,
+    "product_name": "اا",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 88,
+    "profit_loss": 86,
+    "date": "2026-02-12T15:47:56.582Z"
+  },
+  {
+    "id": 1770911276597,
+    "product_name": "بطلي",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T15:47:56.597Z"
+  },
+  {
+    "id": 1770911882307,
+    "product_name": "Yhyh",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T15:58:02.307Z"
+  },
+  {
+    "id": 1770911882328,
+    "product_name": "بطلي",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-12T15:58:02.328Z"
+  },
+  {
+    "id": 1770927814550,
+    "product_name": "Rr",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T20:23:34.550Z"
+  },
+  {
+    "id": 1770927828073,
+    "product_name": "T",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 0,
+    "profit_loss": 0,
+    "date": "2026-02-12T20:23:48.073Z"
+  },
+  {
+    "id": 1770927846649,
+    "product_name": "Yhyh",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T20:24:06.649Z"
+  },
+  {
+    "id": 1770932042293,
+    "product_name": "Yhyh",
+    "customer_name": "عميل نقدي",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T21:34:02.293Z"
+  },
+  {
+    "id": 1770932055428,
+    "product_name": "Yhyh",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-12T21:34:15.428Z"
+  },
+  {
+    "id": 1771080619871,
+    "product_name": "Yhyh",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-14T14:50:19.871Z"
+  },
+  {
+    "id": 1771080619881,
+    "product_name": "بطلي",
+    "customer_name": "Mohamed ",
+    "customer_phone": "01025234025",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-14T14:50:19.881Z"
+  },
+  {
+    "id": 1771081155358,
+    "product_name": "Yhyh",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-14T14:59:15.358Z"
+  },
+  {
+    "id": 1771081155372,
+    "product_name": "بطلي",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-14T14:59:15.372Z"
+  },
+  {
+    "id": 1771081467233,
+    "product_name": "Yhyh",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-14T15:04:27.233Z"
+  },
+  {
+    "id": 1771081467246,
+    "product_name": "بطلي",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-14T15:04:27.246Z"
+  },
+  {
+    "id": 1771081577422,
+    "product_name": "Yhyh",
+    "customer_name": "رقية عليوة",
+    "customer_phone": "01080429743",
+    "quantity": 1,
+    "actual_sell_price": 90,
+    "profit_loss": 40,
+    "date": "2026-02-14T15:06:17.422Z"
+  },
+  {
+    "id": 1771081638539,
+    "product_name": "Yhyh",
+    "customer_name": "رقية عليوة",
+    "customer_phone": "01080429743",
+    "quantity": 6,
+    "actual_sell_price": 90,
+    "profit_loss": 240,
+    "date": "2026-02-14T15:07:18.539Z"
+  },
+  {
+    "id": 1771081662955,
+    "product_name": "Yhyh",
+    "customer_name": "رقية عليوة",
+    "customer_phone": "01080429743",
+    "quantity": 3,
+    "actual_sell_price": 90,
+    "profit_loss": 120,
+    "date": "2026-02-14T15:07:42.955Z"
+  },
+  {
+    "id": 1771082603022,
+    "product_name": "Yhyh",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 2,
+    "actual_sell_price": 90,
+    "profit_loss": 80,
+    "date": "2026-02-14T15:23:23.022Z"
+  },
+  {
+    "id": 1771082603033,
+    "product_name": "بطلي",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 11,
+    "actual_sell_price": 100,
+    "profit_loss": 935,
+    "date": "2026-02-14T15:23:23.033Z"
+  },
+  {
+    "id": 1771094380563,
+    "product_name": "Yhyh",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 86,
+    "profit_loss": 36,
+    "date": "2026-02-14T18:39:40.563Z"
+  },
+  {
+    "id": 1771094416500,
+    "product_name": "Yhyh",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 46,
+    "profit_loss": -4,
+    "date": "2026-02-14T18:40:16.500Z"
+  },
+  {
+    "id": 1771094443742,
+    "product_name": "بطلي",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 1,
+    "actual_sell_price": 100,
+    "profit_loss": 85,
+    "date": "2026-02-14T18:40:43.742Z"
+  },
+  {
+    "id": 1771099028253,
+    "product_name": "Ttt",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 55555,
+    "actual_sell_price": 222222,
+    "profit_loss": 11111000000,
+    "date": "2026-02-14T19:57:08.253Z"
+  },
+  {
+    "id": 1771099074653,
+    "product_name": "Ttt",
+    "customer_name": "عميل",
+    "customer_phone": "---",
+    "quantity": 2258886251,
+    "actual_sell_price": 222222,
+    "profit_loss": 451777250200000,
+    "date": "2026-02-14T19:57:54.653Z"
+  }
+]
