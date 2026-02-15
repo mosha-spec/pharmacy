@@ -89,9 +89,9 @@
     let raw = { sales: [], expenses: [] }, debts = [], time = 'day', chart = null;
 
     async function init() {
-    const res = await fetch('/backend/sales.json');
+    const res = await fetch('/sales.json');
     raw = await res.json();    
-    const resDebts = await fetch('/backend/debts.json');
+​    const resDebts = await fetch('/debts.json');
     debts = await resDebts.json();
 
     process();
